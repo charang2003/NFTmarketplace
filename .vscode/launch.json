@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Hardhat Node",
+        "program": "${workspaceFolder}/node_modules/.bin/hardhat",
+        "args": ["node"],
+        "cwd": "${workspaceFolder}",
+        "runtimeExecutable": null,
+        "runtimeArgs": ["--nolazy"],
+        "env": {
+          "HARDHAT_NETWORK": "localhost"
+        },
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "skipFiles": ["<node_internals>/**"]
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Hardhat Script",
+        "program": "${workspaceFolder}/scripts/deploy.js",
+        "cwd": "${workspaceFolder}",
+        "runtimeExecutable": null,
+        "runtimeArgs": ["--nolazy"],
+        "env": {
+          "HARDHAT_NETWORK": "localhost"
+        },
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "skipFiles": ["<node_internals>/**"]
+      }
+    ]
+  }
+  
