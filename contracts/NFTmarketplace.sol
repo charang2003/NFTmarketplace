@@ -55,5 +55,40 @@ contract NFTmarketplace is ERC721URIStorage {
     }
 
     // Let create NFT token function 
+
+    function createToken (string memory tokenURI,uint256 price )public payable returns(uint 256){
+        _tokenIds.increment();
+        uint256 newTokenId = _tokenIds.current();
+
+        _mint(msg.sender, newTokenId);
+        _setTokenURI(newTokenId, tokenURI);
+
+        createMarketItem(newTokenId, price);
+
+        return newTokenId;
+
+    }
+
+    //creating market item
+    function createMarketItem(uint256 tokenId, uint256 price) private {
+        require(price 0,"price must be atleast 1");
+        require(msg.value == listingPrice, "price must be equal to listing price ");
+
+        idMarketItem[tokenId] = MarketItem(
+            tokenId,
+            payable(msg.sender),
+            payable(address(this)),
+            price, 
+            false
+        );
+        _transfer(msg.sender,address(this),tokenId);
+
+        emit idMarketItemCreated(tokenId, msg.sender, address(this), price, false);
+    }
+
+    //function for resale token 
+    function reSellToken(uint256 tokenId, uint256 price) public payable{
+        require(idToMarketItem[tokenId].owner == );
+    }
     
 }
