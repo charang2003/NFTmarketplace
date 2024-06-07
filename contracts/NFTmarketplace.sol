@@ -56,7 +56,7 @@ contract NFTmarketplace is ERC721URIStorage {
 
     // Let create NFT token function 
 
-    function createToken (string memory tokenURI,uint256 price )public payable returns(uint 256){
+    function createToken (string memory tokenURI,uint256 price )public payable returns(uint256){
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
 
@@ -88,7 +88,36 @@ contract NFTmarketplace is ERC721URIStorage {
 
     //function for resale token 
     function reSellToken(uint256 tokenId, uint256 price) public payable{
-        require(idToMarketItem[tokenId].owner == );
+        require(idToMarketItem[tokenId].owner == msg.sender,"only item owner can pass this function");
+        require(msg.value == listingPrice, "price must be equal to listing price");
+        idMarketItem[tokenId].sold = false;
+        idMarketItem[tokenId].price = price;
+        idMarketItem[tokenId].seller = payable(msg.sender);
+        idMarketItem[tokenId].owner = payable(address(this));
+
+        _itemSold.decrement();
+
+        _transfer(msg.sender, address(this), tokenId);
     }
+
+    //function create market sales
+
+    function createMarketSale(uint256 tokenId) public payable {
+        uint256 price = idMarketItem[tokenId].price;
+
+        require(msg.value == price,"please submit the asking price to complete the purchase");
+
+        idMarketItem[tokenId].owner = payable(msg.sender);
+        idMarketItem[tokenId].sold = true;
+        idMarketItem[tokenId].owner = payable(address(0));
+
+        _itemSold.increment();
+
+        _transfer(address(this), msg.sender,tokenId);
+
+        payable(owner).transfer(listingPrice);
+        payable(idMarketItem[tokenId].seller).transfer(msg.value);
+    }
+
     
 }
